@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>最新新闻十则</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            margin: 80px 200px;
+        }
+        p:nth-of-type(1){
+            color: #4AAA02;
+            font-size: 50px;
+        }
+        button{
+            position: fixed;
+            top: 100px;
+            right: 300px;
+            width: 80px;
+            height:100px ;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+
+</div>
+<button>Refresh</button>
+<script>
+    var button=document.querySelector("button")
+    function newsRefresh() {
+        var ajax=new XMLHttpRequest();
+        var div=document.querySelector('div')
+        ajax.open("GET","http://toutiao-ali.juheapi.com/toutiao/index?type=,top");
+        ajax.setRequestHeader('Authorization','APPCODE 0ee793e4b685427c851aaaaed65734cd');
+        ajax.send();
+        ajax.onreadystatechange=function () {
+            if(ajax.readyState===4&&ajax.status===200){
+                var data=JSON.parse(ajax.responseText);
+                var OneData=data.result.data;
+                //document.write(ajax.responseText);
+                var str='';
+                str+="<p>最新新闻十则</p>"
+                for(var i=0;i<OneData.length;i++){
+                    str+=(i+1)+")<P><a href='"+OneData[i].url+"'>"+OneData[i].title+"</a></P>";
+                    str+="<p>"+OneData[i].date+"</p>";
+                    str+="<img src='"+OneData[i].thumbnail_pic_s+"'/>";
+                }
+                div.innerHTML=str;
+            }else{
+                //console.log(ajax.status);
+            }
+        }
+    }
+    newsRefresh();
+    button.onmousedown=function () {
+        button.style.background="#AA27A2"
+     newsRefresh();
+    }
+    button.onmouseup=function () {
+        button.style.background="none";
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <input type="text" name="" id="">
+    <button>Search</button>
+    <div></div>
+<script>
+    var button=document.querySelector("button")
+    var input=document.querySelector('input');
+
+
+    button.onclick=function () {
+        Refresh();
+    };
+    function Refresh() {
+        var text=input.value;
+        var ajax=new XMLHttpRequest();
+        ajax.open("GET","http://caipu.market.alicloudapi.com/showapi_cpQuery?type="+text);
+        ajax.setRequestHeader('Authorization','APPCODE 0ee793e4b685427c851aaaaed65734cd');
+        ajax.send();
+        ajax.onreadystatechange=function () {
+            if(ajax.readyState===4&&ajax.status===200) {
+                var div=document.querySelector('div');
+                var data = JSON.parse(ajax.responseText);
+                var OneData =data.showapi_res_body.datas;
+                //document.write(ajax.responseText);
+                //console.log(OneData);
+                var str="";
+                str+="<h2>食谱</h2>"
+               // document.write();
+
+                for(var i=0;i<OneData.length;i++){
+                    str+="<h2>"+OneData[i].cpName+"</h2>";
+                   // str+="<img src='"+OneData[i].smallImg+"'>";
+                    //str+="<img src='"+OneData[i].largeImg+"'>";
+                   // for(var j=0;j<OneData.steps.length;j++){
+                    //str+="<p>"+OneData.steps.content+"</p>";
+                   // }
+                    for(var j=0;j<OneData[i].steps.length;j++){
+                       str+="<p>"+(j+1)+OneData[i].steps[j].content+"</p>";
+                       str+="<img src='"+OneData[i].steps[j].imgUrl+"'>"
+                    }
+
+
+                }
+                div.innerHTML=str;
+
+
+            }else{
+               // console.log(ajax.status);
+            }
+        }
+    }
+
+</script>
+</body>
+</html>
